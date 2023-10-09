@@ -42,9 +42,9 @@ pipeline {
         }
         
         stage('Preview & Manual Approval') {
-            when {
-                branch 'dev'
-            }
+            // when {
+            //     branch 'dev'
+            // }
             steps {
                 // sh 'cd build && python -m http.server &'
                 sh 'npm start &'
@@ -54,24 +54,19 @@ pipeline {
         }
         
         stage('Publish Artifact') {
-            when {
-                branch 'dev'
-            }
+            // when {
+            //     branch 'dev'
+            // }
             steps {
                 // This stage is optional
-                echo 'Publishing artifact...'
-            }
-        }
-
-        stage('Store Artifact in Nexus') {
-            steps {
+                echo 'Publishing artifact to Nexus...'
                 script {
                     def groupId = "node-app"
                     def artifactId = "commerce-app"
                     def version = "0.1.0"
                     
                     // Specify the path to the artifact directory or file
-                    def artifactPath = NODE_APP_DIR
+                    def artifactPath = ARTIFACT_PATH
                     
                     nexusArtifactUploader(
                         nexusVersion: NEXUS_VERSION,
