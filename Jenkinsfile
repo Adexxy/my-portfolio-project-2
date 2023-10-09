@@ -32,7 +32,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                sh 'tar -czvf commerce-app.tar.gz build .'
+                sh 'tar -czvf commerce-app.tar.gz build'
             }
             post {
                 success {
@@ -65,7 +65,6 @@ pipeline {
 
         stage('Store Artifact in Nexus') {
             steps {
-                cleanWs()
                 script {
                     def groupId = "node-app"
                     def artifactId = "commerce-app"
