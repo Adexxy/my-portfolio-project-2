@@ -70,10 +70,15 @@ pipeline {
                         script {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
+                            // sh """
+                            // curl -v -u ${nexusCredentials.username}:${nexusCredentials.password} \
+                            //     --upload-file ${ARTIFACT_PATH} \
+                            //     ${NEXUS_URL}/$(basename ${ARTIFACT_PATH})
+                            // """
                             sh """
-                            curl -v -u ${nexusCredentials.username}:${nexusCredentials.password} \
-                                --upload-file ${ARTIFACT_PATH} \
-                                ${NEXUS_URL}/$(basename ${ARTIFACT_PATH})
+                            curl -v -u \${nexusCredentials.username}:\${nexusCredentials.password} \\
+                                --upload-file ${ARTIFACT_PATH} \\
+                                ${NEXUS_URL}/${artifactFileName}
                             """
                         }
                     }
