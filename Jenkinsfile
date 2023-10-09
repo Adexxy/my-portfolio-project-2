@@ -61,20 +61,15 @@ pipeline {
         }
         
         stage('Publish Artifact') {
-            // when {
-            //     branch 'dev'
-            // }
             stages {
                 stage('Upload artifacts') {
                     steps {
                         script {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
-                            // sh """
-                            // curl -v -u ${nexusCredentials.username}:${nexusCredentials.password} \
-                            //     --upload-file ${ARTIFACT_PATH} \
-                            //     ${NEXUS_URL}/$(basename ${ARTIFACT_PATH})
-                            // """
+                            // Extract the artifact file name
+                            def artifactFileName = sh(script: "basename ${ARTIFACT_PATH}", returnStdout: true).trim()
+
                             sh """
                             curl -v -u \${nexusCredentials.username}:\${nexusCredentials.password} \\
                                 --upload-file ${ARTIFACT_PATH} \\
@@ -84,6 +79,7 @@ pipeline {
                     }
                 }
             }
+        
             
 
             // steps {
