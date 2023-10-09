@@ -68,7 +68,7 @@ pipeline {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
                             // Extract the artifact file name
-                            def artifactFileName = sh(script: "basename ${ARTIFACT_PATH}", returnStdout: true).trim()
+                            def artifactFileName = ARTIFACT_PATH.tokenize('/').last()
 
                             sh """
                             curl -v -u \${nexusCredentials.username}:\${nexusCredentials.password} \\
