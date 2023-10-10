@@ -1,7 +1,6 @@
 def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
-def dockerImageName = "adexxy/${artifactId}:${versionNum}"
-def versionNum = "0.1.0"
+def dockerImageName = "adexxy/${artifactId}:0.1.0"
 
 pipeline {
     agent {
@@ -112,12 +111,13 @@ pipeline {
                 echo 'Publishing artifact to Nexus...'
                 script {
                     def groupId = "development"
+                    def version = "0.1.0"
                     nexusArtifactUploader(
                         nexusVersion: NEXUS_VERSION,
                         protocol: NEXUS_PROTOCOL,
                         nexusUrl: NEXUS_URL,
                         groupId: groupId,
-                        version: versionNum,
+                        version: version,
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
