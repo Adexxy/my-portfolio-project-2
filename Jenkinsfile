@@ -23,7 +23,7 @@ pipeline {
     //     NEXUS_URL = 'localhost:8081'
     //     NEXUS_REPOSITORY = "all-types"
     //     NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
-        ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
+        ARTIFACT_PATH = 'commerce-app-0.1.1.tar.gz'  // Path to save the artifact
     }
 
     stages {
@@ -42,7 +42,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                sh 'tar -czvf commerce-app.tar.gz build'
+                sh 'tar -czvf commerce-app-0.1.1.tar.gz build'
             }
             post {
                 success {
