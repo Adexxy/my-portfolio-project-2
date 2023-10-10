@@ -1,6 +1,6 @@
 def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
-def dockerImageName = "adexxy/${artifactId}:0.1.0"
+def dockerImageName = "${artifactId}:0.1.0"
 
 pipeline {
     agent {
