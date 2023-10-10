@@ -48,7 +48,7 @@ pipeline {
         
         stage('Package') {
             when {
-                branch 'dev'
+                branch 'dev2'
             }
             steps {
                 sh "tar -czvf ${artifactFilename} build"
