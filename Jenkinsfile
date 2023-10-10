@@ -68,16 +68,10 @@ pipeline {
                 stage('Upload artifacts') {
                     steps {
                         script {
-                            def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
-
                             sh """
-
-                                curl -v -H "Authorization: Basic amVua2lucy11c2VyOk95aW5kYW1vbEE=" --upload-file commerce-app.tar.gz http://172.19.0.4:8081/repository/all-types/0.1.1/commerce-app.tar.gz
-
-                                
+                                curl -v -H "Authorization: Basic amVua2lucy11c2VyOk95aW5kYW1vbEE="  --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${ARTIFACT_PATH}
                             """
                         }
-
                     }
                 }
             }
