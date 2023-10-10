@@ -74,6 +74,7 @@ pipeline {
                                 curl -v -u jenkins-user:OyindamolA --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${ARTIFACT_PATH}
                             """
                         }
+                        
                     }
                 }
             }
