@@ -69,7 +69,7 @@ pipeline {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
                             sh """
-                            curl -v -u ${nexusCredentials.username}:${nexusCredentials.password} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${artifactFileName}
+                            curl -v -u jenkins-user:${nexusCredentials.password} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${artifactFileName}
                             """
                         }
                     }
