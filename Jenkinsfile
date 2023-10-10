@@ -6,25 +6,25 @@ pipeline {
         }
     }
 
-    environment {
-        // Define environment variables here
-        NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
-        ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
-        NEXUS_URL = "http://localhost:8081/repository/all-types"  // Adjust the repository URL as needed
-        ARTIFACT_VERSION = "0.1.1"
-        NEXUS_USERNAME = "username"
-        NEXUS_PWD = "nexus-pwd"
-    }
-    
     // environment {
     //     // Define environment variables here
-    //     NEXUS_VERSION = "nexus3"
-    //     NEXUS_PROTOCOL = "http"
-    //     NEXUS_URL = 'localhost:8081'
-    //     NEXUS_REPOSITORY = "npm-snapshots"
     //     NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
     //     ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
+    //     NEXUS_URL = "http://localhost:8081/repository/all-types"  // Adjust the repository URL as needed
+    //     ARTIFACT_VERSION = "0.1.1"
+    //     NEXUS_USERNAME = "username"
+    //     NEXUS_PWD = "nexus-pwd"
     // }
+    
+    environment {
+        // Define environment variables here
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = 'localhost:8081'
+        NEXUS_REPOSITORY = "all-types"
+        NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
+        ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
+    }
 
     stages {
         stage('Build') {
@@ -64,49 +64,49 @@ pipeline {
         }
         
         stage('Publish Artifact') {
-            stages {
-                stage('Upload artifacts') {
-                    steps {
-                        script {
-                            def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
+            // stages {
+            //     stage('Upload artifacts') {
+            //         steps {
+            //             script {
+            //                 def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
-                            sh """
-                                curl -v -u ${NEXUS_USERNAME}:${NEXUS_PWD} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${ARTIFACT_PATH}
-                            """
-                        }
-                    }
-                }
-            }
+            //                 sh """
+            //                     curl -v -u ${NEXUS_USERNAME}:${NEXUS_PWD} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${ARTIFACT_PATH}
+            //                 """
+            //             }
+            //         }
+            //     }
+            // }
         
             
 
-            // steps {
-            //     // This stage is optional
-            //     echo 'Publishing artifact to Nexus...'
-            //     script {
-            //         def groupId = "node-app"
-            //         def artifactId = "commerce-app"
-            //         def version = "0.1.0"
+            steps {
+                // This stage is optional
+                echo 'Publishing artifact to Nexus...'
+                script {
+                    def groupId = "node-app"
+                    def artifactId = "commerce-app"
+                    def version = "0.1.0"
                     
-            //         // Specify the path to the artifact directory or file
-            //         def artifactPath = ARTIFACT_PATH
+                    // Specify the path to the artifact directory or file
+                    def artifactPath = ARTIFACT_PATH
                     
-            //         nexusArtifactUploader(
-            //             nexusVersion: NEXUS_VERSION,
-            //             protocol: NEXUS_PROTOCOL,
-            //             nexusUrl: "${NEXUS_URL}repository/${NEXUS_REPOSITORY}/node-app/${version}/${artifactId}-${version}",
-            //             groupId: groupId,
-            //             version: version,
-            //             repository: NEXUS_REPOSITORY,
-            //             credentialsId: NEXUS_CREDENTIAL_ID,
-            //             artifacts: [
-            //                 [artifactId: artifactId,
-            //                 classifier: '',
-            //                 file: artifactPath]
-            //             ]
-            //         )
-            //     }
-            // }
+                    nexusArtifactUploader(
+                        nexusVersion: NEXUS_VERSION,
+                        protocol: NEXUS_PROTOCOL,
+                        nexusUrl: "${NEXUS_URL}repository/${NEXUS_REPOSITORY}/node-app/${version}/${artifactId}-${version}",
+                        groupId: groupId,
+                        version: version,
+                        repository: NEXUS_REPOSITORY,
+                        credentialsId: NEXUS_CREDENTIAL_ID,
+                        artifacts: [
+                            [artifactId: artifactId,
+                            classifier: '',
+                            file: artifactPath]
+                        ]
+                    )
+                }
+            }
         }
     }
 }
