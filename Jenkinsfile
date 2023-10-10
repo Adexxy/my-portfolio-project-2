@@ -10,7 +10,7 @@ pipeline {
         // Define environment variables here
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = 'localhost:8081'
+        NEXUS_URL = '172.19.0.4:8081'
         NEXUS_REPOSITORY = "all-types"
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
@@ -68,7 +68,7 @@ pipeline {
                     nexusArtifactUploader(
                         nexusVersion: NEXUS_VERSION,
                         protocol: NEXUS_PROTOCOL,
-                        nexusUrl: "${NEXUS_URL}repository/${NEXUS_REPOSITORY}/node-app/${version}/${artifactId}-${version}",
+                        nexusUrl: ${NEXUS_URL},
                         groupId: groupId,
                         version: version,
                         repository: NEXUS_REPOSITORY,
@@ -76,7 +76,7 @@ pipeline {
                         artifacts: [
                             [artifactId: artifactId,
                             classifier: '',
-                            file: artifactPath + version + '.tar.gz',
+                            file: artifactId + version + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
