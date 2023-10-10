@@ -10,7 +10,8 @@ pipeline {
         // Define environment variables here
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
-        NEXUS_URL = "http://localhost:8081/repository/npm-snapshots"  // Adjust the repository URL as needed
+        NEXUS_URL = "http://localhost:8081/repository/all-types/"  // Adjust the repository URL as needed
+        ARTIFACT_VERSION = "0.1.1"
     }
     
     // environment {
@@ -67,13 +68,8 @@ pipeline {
                         script {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
-                            // Extract the artifact file name
-                            def artifactFileName = ARTIFACT_PATH.tokenize('/').last()
-
                             sh """
-                            curl -v -u \${nexusCredentials.username}:\${nexusCredentials.password} \\
-                                --upload-file ${ARTIFACT_PATH} \\
-                                ${NEXUS_URL}/${artifactFileName}
+                            curl -v -u ${nexusCredentials.username}:${nexusCredentials.password} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${artifactFileName}
                             """
                         }
                     }
