@@ -12,6 +12,8 @@ pipeline {
         ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
         NEXUS_URL = "http://localhost:8081/repository/all-types/"  // Adjust the repository URL as needed
         ARTIFACT_VERSION = "0.1.1"
+        NEXUS_USERNAME = "username"
+        NEXUS_PWD = "nexus-pwd"
     }
     
     // environment {
@@ -69,7 +71,7 @@ pipeline {
                             def nexusCredentials = credentials("${NEXUS_CREDENTIAL_ID}")
 
                             sh """
-                            curl -v -u jenkins-user:${nexusCredentials.password} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${artifactFileName}
+                            curl -v -u ${NEXUS_USERNAME}:${NEXUS_PWD} --upload-file ${ARTIFACT_PATH} ${NEXUS_URL}/${ARTIFACT_VERSION}/${artifactFileName}
                             """
                         }
                     }
