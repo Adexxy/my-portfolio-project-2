@@ -16,14 +16,14 @@ pipeline {
     //     NEXUS_PWD = "nexus-pwd"
     // }
     
-    // environment {
+    environment {
     //     // Define environment variables here
     //     NEXUS_VERSION = "nexus3"
     //     NEXUS_PROTOCOL = "http"
     //     NEXUS_URL = 'localhost:8081'
     //     NEXUS_REPOSITORY = "all-types"
     //     NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
-    //     ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
+        ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
     // }
 
     stages {
