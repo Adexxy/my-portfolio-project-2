@@ -117,7 +117,7 @@ pipeline {
                         protocol: 'http',
                         nexusUrl: 'http://localhost:8081/repository/',
                         groupId: 'test',
-                        version: version,
+                        version: '0.1.1',
                         repository: 'all-types',
                         credentialsId: 'f87a2a46-8d1f-4c60-86ee-302c3e93619d',
                         artifacts: [
