@@ -82,28 +82,6 @@ pipeline {
                     )
                 }
             }
-
-            // steps {
-            //     // This stage is optional
-            //     echo 'Publishing artifact to Nexus...'
-            //     script {
-            //         nexusArtifactUploader(
-            //             nexusVersion: 'nexus3',
-            //             protocol: 'http',
-            //             nexusUrl: '172.19.0.4:8081',
-            //             groupId: 'test',
-            //             version: '0.1.0',
-            //             repository: 'all-types',
-            //             credentialsId: 'f87a2a46-8d1f-4c60-86ee-302c3e93619d',
-            //             artifacts: [
-            //                 [artifactId: 'commerce-app',
-            //                 classifier: '',
-            //                 file: 'commerce-app' + '' + '.tar.gz',
-            //                 type: 'tar.gz']
-            //             ]
-            //         )
-            //     }
-            // }
         }
     }
 }
