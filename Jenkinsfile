@@ -24,7 +24,7 @@ pipeline {
     //     NEXUS_REPOSITORY = "all-types"
     //     NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
-    // }
+    }
 
     stages {
         stage('Build') {
