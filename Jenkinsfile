@@ -123,7 +123,7 @@ pipeline {
                         artifacts: [
                             [artifactId: 'commerce-app',
                             classifier: '',
-                            file: 'commerce-app-' + '0.1.0' + '.tar.gz',
+                            file: 'commerce-app-' + '' + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
