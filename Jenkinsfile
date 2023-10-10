@@ -10,7 +10,7 @@ pipeline {
         // Define environment variables here
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACT_PATH = 'commerce-app.tar.gz'  // Path to save the artifact
-        NEXUS_URL = "http://localhost:8081/repository/all-types/"  // Adjust the repository URL as needed
+        NEXUS_URL = "http://localhost:8081/repository/all-types"  // Adjust the repository URL as needed
         ARTIFACT_VERSION = "0.1.1"
         NEXUS_USERNAME = "username"
         NEXUS_PWD = "nexus-pwd"
