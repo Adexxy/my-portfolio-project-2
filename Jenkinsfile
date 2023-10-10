@@ -1,7 +1,7 @@
 def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
 def dockerImageName = "adexxy/${artifactId}:${version}"
-def version = "0.1.0"
+def versionNum = "0.1.0"
 
 pipeline {
     agent {
@@ -118,7 +118,7 @@ pipeline {
                         protocol: NEXUS_PROTOCOL,
                         nexusUrl: NEXUS_URL,
                         groupId: groupId,
-                        version: version,
+                        version: versionNum,
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
