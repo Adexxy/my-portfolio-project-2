@@ -1,6 +1,6 @@
 def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
-def dockerImageName = "adexxy/${artifactId}:${version}"
+def dockerImageName = "adexxy/${artifactId}:${versionNum}"
 def versionNum = "0.1.0"
 
 pipeline {
@@ -112,7 +112,6 @@ pipeline {
                 echo 'Publishing artifact to Nexus...'
                 script {
                     def groupId = "development"
-                    def version = "0.1.0"
                     nexusArtifactUploader(
                         nexusVersion: NEXUS_VERSION,
                         protocol: NEXUS_PROTOCOL,
