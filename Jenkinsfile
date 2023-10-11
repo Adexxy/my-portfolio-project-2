@@ -44,9 +44,6 @@ pipeline {
         }
         
         stage('Package') {
-            when {
-                branch 'dev2'
-            }
             steps {
                 // Change to the workspace directory where the artifact is created
                 dir("${WORKSPACE}") {
