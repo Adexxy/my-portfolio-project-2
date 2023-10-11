@@ -24,6 +24,10 @@ pipeline {
     }
 
     stages {
+        stage ('Test Docker') {
+            sh 'docker --version'
+            sh 'which docker'
+        }
         stage('Build') {
             steps {
                 sh 'npm install'
