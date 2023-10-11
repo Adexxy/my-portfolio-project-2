@@ -10,6 +10,7 @@ pipeline {
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
+        DOCKER_USER = "adexxy"
         DOCKER_CREDENTIAL_ID = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
@@ -73,28 +74,18 @@ pipeline {
                 script {
                     // Build the Docker image
                     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-
+                    
                     // Log in to Docker registry using Jenkins credentials
-                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIAL_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh "echo \${DOCKER_PASS} | docker login -u \${DOCKER_USER} --password-stdin"
-                    }
+                    withCredentials([usernamePassword(credentialsId: 'YOUR_JENKINS_CREDENTIAL_ID', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                
+                    // Log in to Docker Hub or your Docker registry
+                    // sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
                     
                     // Push the Docker image to the registry
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
                 }
-
-                // script {
-                //     // Build the Docker image
-                //     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                    
-                
-                //     // Log in to Docker Hub or your Docker registry
-                //     // sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                    
-                //     // Push the Docker image to the registry
-                //     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-                //     }
-                // }
             }
         }
 
