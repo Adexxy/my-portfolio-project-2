@@ -78,7 +78,6 @@ pipeline {
             steps {
                 sh "/usr/bin/docker build -t ${dockerImageName} ."
                                    
-                }
             }
         }
 
