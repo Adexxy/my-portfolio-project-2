@@ -75,8 +75,11 @@ pipeline {
                     // Build the Docker image
                     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     
+                    // Log in to Docker registry using credentials
+                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    
                     // Log in to Docker Hub or your Docker registry
-                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    // sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
                     
                     // Push the Docker image to the registry
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
