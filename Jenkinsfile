@@ -81,27 +81,6 @@ pipeline {
             }
         }
 
-        // stage('Push Docker Image to DockerHub') {
-        //     when {
-        //         branch 'dev2'
-        //         // expression { DOCKER_HUB_USERNAME && DOCKER_HUB_PASSWORD }
-        //     }
-        //     steps {
-        //         // script {
-        //         //     docker.withRegistry("${DOCKER_HUB_REGISTRY}", "${DOCKER_HUB_USERNAME}", "${DOCKER_HUB_PASSWORD}") {
-        //         //         dockerImagePush("${dockerImageName}")
-        //         //     }
-        //         // }
-
-        //         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-
-        //         // Push to dockerhub
-        //         sh 'docker push ${dockerImageName}:${BUILD_NUMBER}'
-
-        //     }
-        // }
-
-
         stage('Publish Artifact') {
             when {
                 branch 'dev2'
@@ -129,39 +108,5 @@ pipeline {
                 }
             }
         }
-
-        // stage {
-        //     steps {
-        //         echo 'Building Image ...'
-        //         sh "docker build -t 64.227.128.95:8082/sanskriti-portfolio:${BUILD_NUMBER} ."
-
-        //         echo 'Pushing image to docker hosted rerpository on Nexus'
-
-        //         withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'PSW', usernameVariable: 'USER')]){
-        //             sh "echo ${PSW} | docker login -u ${USER} --password-stdin 64.227.128.95:8082"
-        //             sh "docker push 64.227.128.95:8082/sanskriti-portfolio:${BUILD_NUMBER}"
-        //         }
-        //     }
-        // }
-
-
-        
-
-
-        // stage {
-        //     // Build and upload container image
-        //     steps {
-        //         script {
-        //             docker.withRegistry('',DOCKER_PASS) {
-        //                 docker_image = docker.build "${IMAGE_NAME}"
-        //             }
-
-        //             docker.withRegistry('',DOCKER_PASS) {
-        //                 docker_image.push("${IMAGE_TAG}")
-        //                 docker_image.push('latest')
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
