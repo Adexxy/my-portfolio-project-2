@@ -42,9 +42,9 @@ pipeline {
         }
         
         stage('Package') {
-            when {
-                branch 'dev2'
-            }
+            // when {
+            //     branch 'dev2'
+            // }
             steps {
                 sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
             }
@@ -56,9 +56,9 @@ pipeline {
         }
         
         stage('Preview & Manual Approval') {
-            when {
-                branch 'dev2'
-            }
+            // when {
+            //     branch 'dev2'
+            // }
             steps {
                 sh 'npm start &'
                 sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
@@ -67,9 +67,9 @@ pipeline {
         }
         
         stage('Build and Push Docker Image') {
-            when {
-                branch 'dev2'
-            }
+            // when {
+            //     branch 'dev2'
+            // }
             steps {
                 script {
                     // Log in to Docker registry using Jenkins credentials
@@ -85,9 +85,9 @@ pipeline {
         }
 
         stage('Publish Artifact to Nexus') {
-            when {
-                branch 'dev2'
-            }
+            // when {
+            //     branch 'dev2'
+            // }
             steps {
                 echo 'Publishing artifact to Nexus...'
                 script {
