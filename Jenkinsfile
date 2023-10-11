@@ -74,10 +74,10 @@ pipeline {
             }
             steps {
                 script {
-                    // docker.build("${dockerImageName}")
+                    docker.build("${dockerImageName}")
 
                     // or with shell
-                    sh "/usr/bin/docker build -t ${dockerImageName} ."
+                    // sh "/usr/bin/docker build -t ${dockerImageName} ."
                 }
             }
         }
