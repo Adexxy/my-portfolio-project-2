@@ -3,6 +3,18 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'node:latest'
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = '172.19.0.4:8081'
+        NEXUS_REPOSITORY = "all-types"
+        NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
+        ARTIFACTID = 'commerce-app'
+        APP_VERSION = "0.1.0"
+        DOCKER_USER = "adexxy"
+        DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
+        ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
+        IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
+        IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
     }
 
     stages {
@@ -24,61 +36,10 @@ pipeline {
                 }
             }
             steps {
-                // Run your Node.js build and test commands here
+                // Run your Node.js build
                 sh 'npm install'
                 sh 'npm run build'
-                sh 'npm test'
-            }
-        }
-
-        // Rest of the stages
-    }
-}
-
-
-
-pipeline {
-    agent {
-        docker {
-            image 'node:latest'
-            args '-p 3000:3000 -e DOCKER_HOST=tcp://docker:2376 -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-
-    }
-    
-    environment {
-        // Define environment variables here
-        NEXUS_VERSION = "nexus3"
-        NEXUS_PROTOCOL = "http"
-        NEXUS_URL = '172.19.0.4:8081'
-        NEXUS_REPOSITORY = "all-types"
-        NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
-        ARTIFACTID = 'commerce-app'
-        APP_VERSION = "0.1.0"
-        DOCKER_USER = "adexxy"
-        DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
-        ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
-        IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
-        IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
-    }
-
-    stages {
-        stage ('Test Docker') {
-            steps {
-                sh 'docker --version'
-                sh 'which docker'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'npm install'
-                sh 'npm run build'
-            }
-        }
-        
-        stage('Test') {
-            steps {
+                // Test commands here
                 sh 'npm test'
             }
         }
