@@ -2,8 +2,9 @@ pipeline {
     agent {
         docker {
             image 'node:latest'
-            args '-p 3000:3000'
+            args '-p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock'
         }
+
     }
     
     environment {
@@ -61,12 +62,6 @@ pipeline {
         stage('Build and Push Docker Image') {
             when {
                 branch 'dev2'
-            }
-            agent {
-                docker {
-                    image 'docker:latest'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
             }
             steps {
                 // script {
