@@ -10,7 +10,8 @@ pipeline {
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
-        DOCKER_CREDENTIAL_ID = 'a9402d12-9abe-40d0-811a-494fd59283c7'
+        DOCKER_USER = "adexxy"
+        DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
@@ -55,9 +56,6 @@ pipeline {
         }
         
         stage('Preview & Manual Approval') {
-            when {
-                branch 'main'
-            }
             steps {
                 sh 'npm start &'
                 sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
@@ -71,14 +69,14 @@ pipeline {
             }
             steps {
                 script {
+                    // Log in to Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: 'YOUR_JENKINS_CREDENTIAL_ID', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
+                    
                     // Build and push the Docker image
                     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-
-                    // Log in to Docker registry using Jenkins credentials
-                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIAL_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                    }
                 }
             }
         }
@@ -111,7 +109,3 @@ pipeline {
         }
     }
 }
-
-
-
-
