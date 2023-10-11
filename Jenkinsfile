@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:latest'
-            args '-p 3000:3000 -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-p 3000:3000 -e DOCKER_HOST=tcp://docker:2376 -v /var/run/docker.sock:/var/run/docker.sock'
         }
 
     }
