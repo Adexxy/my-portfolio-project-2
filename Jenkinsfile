@@ -76,11 +76,8 @@ pipeline {
                 branch 'dev2'
             }
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
-
-                    // or with shell
-                    // sh "/usr/bin/docker build -t ${dockerImageName} ."
+                sh "/usr/bin/docker build -t ${dockerImageName} ."
+                                   
                 }
             }
         }
