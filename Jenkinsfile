@@ -16,7 +16,7 @@ pipeline {
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
         DOCKER_USER = "adexxy"
-        DOCKER_PASS = 'dckr_pat_dvxPkQ9jRPhMwHdhEVL2tCV1c84'
+        DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
