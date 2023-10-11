@@ -16,7 +16,7 @@ pipeline {
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
         DOCKER_USER = "adexxy"
-        DOCKER_PASS = 'dockerhub'
+        DOCKER_PASS = 'dckr_pat_dvxPkQ9jRPhMwHdhEVL2tCV1c84'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
@@ -63,10 +63,21 @@ pipeline {
                 branch 'dev2'
             }
             steps {
+                // script {
+                //     def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                //     docker.withRegistry('https://index.docker.io/v1/', DOCKER_USER, DOCKER_PASS) {
+                //         dockerImage.push()
+                //     }
+                // }
+
                 script {
-                    def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_USER, DOCKER_PASS) {
-                        dockerImage.push()
+                    docker.withRegistry('',DOCKER_PASS) {
+                        docker_image = docker.build "${IMAGE_NAME}"
+                    }
+
+                    docker.withRegistry('',DOCKER_PASS) {
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
                     }
                 }
             }
