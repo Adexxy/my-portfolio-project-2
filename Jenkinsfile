@@ -62,6 +62,12 @@ pipeline {
             when {
                 branch 'dev2'
             }
+            agent {
+                docker {
+                    image 'docker:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 // script {
                 //     def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
