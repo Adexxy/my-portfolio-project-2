@@ -1,14 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:latest'
-            args '-p 3000:3000 -e DOCKER_HOST=tcp://docker:2376 -v /var/run/docker.sock:/var/run/docker.sock'
-        }
+    agent any  // Use any available agent, as we'll run Docker commands directly on the Jenkins server
 
-    }
-    
     environment {
-        // Define environment variables here
+        DOCKER_IMAGE = 'node:latest'
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = '172.19.0.4:8081'
@@ -24,22 +18,28 @@ pipeline {
     }
 
     stages {
-        stage ('Test Docker') {
+        stage('Test Docker') {
             steps {
-                sh 'docker --version'
-                sh 'which docker'
+                script {
+                    // Run Docker commands directly on the Jenkins server
+                    sh 'docker --version'
+                    sh 'docker ps'
+                }
             }
         }
 
-        stage('Build') {
+        stage('Build and Test Node.js') {
+            agent {
+                docker {
+                    image DOCKER_IMAGE
+                    args '-p 3000:3000'
+                }
+            }
             steps {
+                // Run your Node.js build
                 sh 'npm install'
                 sh 'npm run build'
-            }
-        }
-        
-        stage('Test') {
-            steps {
+                // Test commands here
                 sh 'npm test'
             }
         }
@@ -119,6 +119,7 @@ pipeline {
         }
     }
 }
+
 
 
 
