@@ -74,7 +74,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.build("${dockerImageName}")
+                    docker.build("${dockerImageName}", "-f Dockerfile .")
 
                     // or with shell
                     // sh "docker build -t ${dockerImageName}:${BUILD_NUMBER} ."
