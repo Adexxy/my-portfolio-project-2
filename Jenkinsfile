@@ -77,7 +77,7 @@ pipeline {
                     // docker.build("${dockerImageName}")
 
                     // or with shell
-                    sh "docker build -t ${dockerImageName} ."
+                    sh "/usr/bin/docker build -t ${dockerImageName} ."
                 }
             }
         }
