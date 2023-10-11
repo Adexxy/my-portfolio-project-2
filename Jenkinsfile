@@ -68,20 +68,38 @@ pipeline {
         //     }
         // }
         
-        stage('Build and Push Docker Image') {
-            steps {
+
+        steps {
                 script {
-                    // Build the Docker image
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    // Log in to Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
                     
-                    // Log in to Docker Hub or your Docker registry
-                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    // Build and push the Docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     
                     // Push the Docker image to the registry
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
+
+        // stage('Build and Push Docker Image') {
+        //     steps {
+        //         script {
+        //             // Build the Docker image
+        //             sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    
+        //             // Log in to Docker Hub or your Docker registry
+        //             sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    
+        //             // Push the Docker image to the registry
+        //             sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+        //         }
+        //     }
+        // }
+
         stage('Publish Artifact to Nexus') {
             steps {
                 echo 'Publishing artifact to Nexus...'
