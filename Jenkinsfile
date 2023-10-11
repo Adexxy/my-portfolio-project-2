@@ -11,7 +11,7 @@ pipeline {
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
         DOCKER_USER = "adexxy"
-        DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
+        DOCKERHUB_CREDENTIALS = credentials('a9402d12-9abe-40d0-811a-494fd59283c7')
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
@@ -76,7 +76,7 @@ pipeline {
                     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     
                     // Log in to Docker registry using credentials
-                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     
                     // Log in to Docker Hub or your Docker registry
                     // sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
