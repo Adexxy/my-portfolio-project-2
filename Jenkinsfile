@@ -1,8 +1,6 @@
 pipeline {
     agent any  // Use any available agent, as we'll run Docker commands directly on the Jenkins server
-
     environment {
-        // Environment variables to define configurations and parameters
         DOCKER_IMAGE = 'node:latest'
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
@@ -17,7 +15,6 @@ pipeline {
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
     }
-
     stages {
         stage('Test Docker') {
             steps {
@@ -29,7 +26,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build and Test Node.js') {
             agent {
                 docker {
@@ -49,7 +45,7 @@ pipeline {
                 sh 'pwd'
             }
         }
-
+        
         stage('Package') {
             steps {
                 // Unstash the build folder
@@ -63,6 +59,15 @@ pipeline {
                 }
             }
         }
+        
+        // stage('Preview & Manual Approval') {
+        //     steps {
+        //         sh 'npm start &'
+        //         sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
+        //         input "Preview the application and approve to proceed"
+        //     }
+        // }
+        
 
         stage('Build and Push Docker Image') {
             steps {
@@ -94,9 +99,9 @@ pipeline {
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
                             [ARTIFACTID: ARTIFACTID,
-                             classifier: '',
-                             file: ARTIFACT_FILE_NAME,
-                             type: 'tar.gz']
+                            classifier: '',
+                            file: ARTIFACT_FILE_NAME,
+                            type: 'tar.gz']
                         ]
                     )
                 }
