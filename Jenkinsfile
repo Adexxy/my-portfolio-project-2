@@ -70,18 +70,17 @@ pipeline {
         
 
         steps {
-                script {
-                    // Log in to Docker registry using Jenkins credentials
-                    withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                    }
-                    
-                    // Build and push the Docker image
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                    
-                    // Push the Docker image to the registry
-                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+            script {
+                // Log in to Docker registry using Jenkins credentials
+                withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
                 }
+                
+                // Build and push the Docker image
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                
+                // Push the Docker image to the registry
+                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
 
