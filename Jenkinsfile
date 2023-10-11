@@ -1,6 +1,6 @@
 def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
-def dockerImageName = "${artifactId}:0.1.0"
+def dockerImageName = "${artifactId}:${BUILD_NUMBER}"
 
 pipeline {
     agent {
@@ -77,7 +77,7 @@ pipeline {
                     // docker.build("${dockerImageName}")
 
                     // or with shell
-                    sh "docker build -t ${dockerImageName}:${BUILD_NUMBER} ."
+                    sh "docker build -t ${dockerImageName} ."
                 }
             }
         }
