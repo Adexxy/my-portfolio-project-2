@@ -2,6 +2,7 @@ def artifactId = 'commerce-app'
 def artifactFilename = "${artifactId}.tar.gz"
 def dockerImageName = "${artifactId}:${BUILD_NUMBER}"
 
+
 pipeline {
     agent {
         docker {
@@ -21,6 +22,8 @@ pipeline {
 
 
         DOCKERHUB_CREDENTIALS = credentials('a9402d12-9abe-40d0-811a-494fd59283c7')
+        DOCKER_IMAGE = "${dockerImageName}"
+
         // DOCKER_USER = "dmancloud"
         // DOCKER_PASS = 'dockerhub'
         // IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
@@ -74,7 +77,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.build("${dockerImageName}")
+                    docker.build("${DOCKER_IMAGE}")
 
                     // or with shell
                     // sh "/usr/bin/docker build -t ${dockerImageName} ."
