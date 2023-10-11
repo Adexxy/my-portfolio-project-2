@@ -56,6 +56,9 @@ pipeline {
         }
         
         stage('Preview & Manual Approval') {
+            when {
+                branch 'dev2'
+            }
             steps {
                 sh 'npm start &'
                 sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
