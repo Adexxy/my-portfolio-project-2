@@ -41,18 +41,10 @@ pipeline {
                 sh 'npm test'
                 sh 'pwd'
             }
-        }
         
-        stage('Package') {
             steps {
-                // Change to the workspace directory where the artifact is created
-                dir("${WORKSPACE}") {
-                    // Print the current directory for verification
-                    sh 'pwd'
-                    
-                    // Package the artifact
-                    sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
-                }
+                sh 'pwd'
+                sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
             }
             post {
                 success {
@@ -60,7 +52,6 @@ pipeline {
                 }
             }
         }
-
         
         // stage('Preview & Manual Approval') {
         //     steps {
