@@ -22,6 +22,7 @@ pipeline {
                     // Run Docker commands directly on the Jenkins server
                     sh 'docker --version'
                     sh 'docker ps'
+                    sh 'pwd'
                 }
             }
         }
