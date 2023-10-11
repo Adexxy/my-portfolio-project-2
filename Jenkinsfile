@@ -42,9 +42,6 @@ pipeline {
         }
         
         stage('Package') {
-            when {
-                branch 'dev2'
-            }
             steps {
                 sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
             }
@@ -55,18 +52,15 @@ pipeline {
             }
         }
         
-        stage('Preview & Manual Approval') {
-            steps {
-                sh 'npm start &'
-                sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
-                input "Preview the application and approve to proceed"
-            }
-        }
+        // stage('Preview & Manual Approval') {
+        //     steps {
+        //         sh 'npm start &'
+        //         sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
+        //         input "Preview the application and approve to proceed"
+        //     }
+        // }
         
         stage('Build and Push Docker Image') {
-            when {
-                branch 'dev2'
-            }
             steps {
                 script {
                     // Build the Docker image
@@ -81,9 +75,6 @@ pipeline {
             }
         }
         stage('Publish Artifact to Nexus') {
-            when {
-                branch 'dev2'
-            }
             steps {
                 echo 'Publishing artifact to Nexus...'
                 script {
