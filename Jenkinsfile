@@ -82,25 +82,25 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image to DockerHub') {
-            when {
-                branch 'dev2'
-                // expression { DOCKER_HUB_USERNAME && DOCKER_HUB_PASSWORD }
-            }
-            steps {
-                // script {
-                //     docker.withRegistry("${DOCKER_HUB_REGISTRY}", "${DOCKER_HUB_USERNAME}", "${DOCKER_HUB_PASSWORD}") {
-                //         dockerImagePush("${dockerImageName}")
-                //     }
-                // }
+        // stage('Push Docker Image to DockerHub') {
+        //     when {
+        //         branch 'dev2'
+        //         // expression { DOCKER_HUB_USERNAME && DOCKER_HUB_PASSWORD }
+        //     }
+        //     steps {
+        //         // script {
+        //         //     docker.withRegistry("${DOCKER_HUB_REGISTRY}", "${DOCKER_HUB_USERNAME}", "${DOCKER_HUB_PASSWORD}") {
+        //         //         dockerImagePush("${dockerImageName}")
+        //         //     }
+        //         // }
 
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        //         sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 
-                // Push to dockerhub
-                sh 'docker push ${dockerImageName}:${BUILD_NUMBER}'
+        //         // Push to dockerhub
+        //         sh 'docker push ${dockerImageName}:${BUILD_NUMBER}'
 
-            }
-        }
+        //     }
+        // }
 
 
         stage('Publish Artifact') {
