@@ -76,11 +76,10 @@ pipeline {
 
                     // Log in to Docker registry using Jenkins credentials
                     withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIAL_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
                     // Push the Docker image to the registry
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-                    }
                 }
 
                 // script {
