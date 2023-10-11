@@ -34,6 +34,9 @@ pipeline {
                 }
             }
             steps {
+                // Stash the build folder
+                stash(name: 'buildFolder', includes: 'build/**')
+
                 // Run your Node.js build
                 sh 'npm install'
                 sh 'npm run build'
@@ -45,6 +48,8 @@ pipeline {
         
         stage('Package') {
             steps {
+                // Unstash the build folder
+                unstash 'buildFolder'
                 sh 'pwd'
                 sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
             }
