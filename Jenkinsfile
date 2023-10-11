@@ -77,7 +77,7 @@ pipeline {
                     // docker.build("${dockerImageName}")
 
                     // or with shell
-                    sh "docker build -t ${dockerImageName} ."
+                    sh 'docker build -t ${dockerImageName} .'
                 }
             }
         }
@@ -97,7 +97,7 @@ pipeline {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 
                 // Push to dockerhub
-                sh 'docker push adexxy/commerce-app:0.1.0'
+                sh 'docker push ${dockerImageName}:${BUILD_NUMBER}'
 
             }
         }
