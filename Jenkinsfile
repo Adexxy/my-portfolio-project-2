@@ -44,9 +44,18 @@ pipeline {
         }
         
         stage('Package') {
+            when {
+                branch 'dev2'
+            }
             steps {
-                sh 'pwd'
-                sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
+                // Change to the workspace directory where the artifact is created
+                dir("${WORKSPACE}") {
+                    // Print the current directory for verification
+                    sh 'pwd'
+                    
+                    // Package the artifact
+                    sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
+                }
             }
             post {
                 success {
@@ -54,6 +63,7 @@ pipeline {
                 }
             }
         }
+
         
         // stage('Preview & Manual Approval') {
         //     steps {
