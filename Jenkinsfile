@@ -38,11 +38,13 @@ pipeline {
                 sh 'npm run build'
                 // Test commands here
                 sh 'npm test'
+                sh 'pwd'
             }
         }
         
         stage('Package') {
             steps {
+                sh 'pwd'
                 sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
             }
             post {
