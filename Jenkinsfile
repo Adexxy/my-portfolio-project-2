@@ -6,7 +6,7 @@ pipeline {
         NEXUS_PROTOCOL = "http"
         NEXUS_URL = '172.19.0.4:8081'
         NEXUS_REPOSITORY = "all-types"
-        NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
+        NEXUS_CREDENTIAL_ID = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACTID = 'commerce-app'
         APP_VERSION = "0.1.0"
         DOCKER_USER = "adexxy"
