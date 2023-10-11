@@ -1,6 +1,8 @@
 pipeline {
     agent any  // Use any available agent, as we'll run Docker commands directly on the Jenkins server
+
     environment {
+        // Environment variables to define configurations and parameters
         DOCKER_IMAGE = 'node:latest'
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
@@ -15,6 +17,7 @@ pipeline {
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
     }
+
     stages {
         stage('Test Docker') {
             steps {
@@ -26,6 +29,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build and Test Node.js') {
             agent {
                 docker {
@@ -45,7 +49,7 @@ pipeline {
                 sh 'pwd'
             }
         }
-        
+
         stage('Package') {
             steps {
                 // Unstash the build folder
@@ -59,47 +63,21 @@ pipeline {
                 }
             }
         }
-        
-        // stage('Preview & Manual Approval') {
-        //     steps {
-        //         sh 'npm start &'
-        //         sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
-        //         input "Preview the application and approve to proceed"
-        //     }
-        // }
-        
 
-        stage {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
-                // Log in to Docker registry using Jenkins credentials
-                withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                }
-                
-                // Build and push the Docker image
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                
-                // Push the Docker image to the registry
-                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                    // Log in to Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
+
+                    // Build and push the Docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
-
-        // stage('Build and Push Docker Image') {
-        //     steps {
-        //         script {
-        //             // Build the Docker image
-        //             sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-                    
-        //             // Log in to Docker Hub or your Docker registry
-        //             sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                    
-        //             // Push the Docker image to the registry
-        //             sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-        //         }
-        //     }
-        // }
 
         stage('Publish Artifact to Nexus') {
             steps {
@@ -116,9 +94,9 @@ pipeline {
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
                             [ARTIFACTID: ARTIFACTID,
-                            classifier: '',
-                            file: ARTIFACT_FILE_NAME,
-                            type: 'tar.gz']
+                             classifier: '',
+                             file: ARTIFACT_FILE_NAME,
+                             type: 'tar.gz']
                         ]
                     )
                 }
