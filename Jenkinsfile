@@ -83,7 +83,7 @@ pipeline {
                         protocol: NEXUS_PROTOCOL,
                         nexusUrl: NEXUS_URL,
                         groupId: groupId,
-                        version: APP_VERSION,
+                        version: "${APP_VERSION}/${IMAGE_TAG}",
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
