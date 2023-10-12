@@ -36,7 +36,6 @@ pipeline {
             steps {
                 // Stash the build folder
                 stash(name: 'buildFolder', includes: 'build/**')
-
                 // Run your Node.js build
                 sh 'npm install'
                 sh 'npm run build'
@@ -68,7 +67,6 @@ pipeline {
         //     }
         // }
         
-
         stage('Build and Push Docker Image') {
             steps {
                 script {
@@ -76,14 +74,12 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
                         sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
                     }
-
                     // Build and push the Docker image
                     sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
-
         stage('Publish Artifact to Nexus') {
             steps {
                 echo 'Publishing artifact to Nexus...'
@@ -98,9 +94,9 @@ pipeline {
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
-                            [artifactId: ARTIFACTID,
-                            classifier:'',
-                            file: "${ARTIFACTID}" + '.tar.gz',
+                            [ARTIFACTID: ARTIFACTID,
+                            classifier: '',
+                            file: ARTIFACT_FILE_NAME,
                             type: 'tar.gz']
                         ]
                     )
