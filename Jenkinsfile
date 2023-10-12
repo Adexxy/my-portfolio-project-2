@@ -7,14 +7,14 @@ pipeline {
     
     environment {
         DOCKER_IMAGE = 'node:latest'
-        NEXUS_VERSION = "nexus3"
-        NEXUS_PROTOCOL = "http"
+        NEXUS_VERSION = 'nexus3'
+        NEXUS_PROTOCOL = 'http'
         NEXUS_URL = '172.19.0.4:8081'
-        NEXUS_REPOSITORY = "all-types"
+        NEXUS_REPOSITORY = 'all-types'
         NEXUS_CREDENTIAL_ID = 'f87a2a46-8d1f-4c60-86ee-302c3e93619d'
         ARTIFACTID = 'commerce-app'
-        APP_VERSION = "0.1.0"
-        DOCKER_USER = "adexxy"
+        APP_VERSION = '0.1.0'
+        DOCKER_USER = 'adexxy'
         DOCKER_PASS = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
@@ -87,9 +87,9 @@ pipeline {
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
-                            [ARTIFACTID: ARTIFACTID,
+                            [artifactId: ARTIFACTID,
                             classifier:'',
-                            file: ARTIFACT_FILE_NAME + '.tar.gz',
+                            file: "${ARTIFACT_FILE_NAME}" + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
@@ -98,3 +98,20 @@ pipeline {
         }
     }
 }
+
+
+// nexusArtifactUploader(
+//         nexusVersion: 'nexus3',
+//         protocol: 'http',
+//         nexusUrl: 'my.nexus.address',
+//         groupId: 'com.example',
+//         version: version,
+//         repository: 'RepositoryName',
+//         credentialsId: 'CredentialsId',
+//         artifacts: [
+//             [artifactId: projectName,
+//              classifier: '',
+//              file: 'my-service-' + version + '.jar',
+//              type: 'jar']
+//         ]
+//      )
