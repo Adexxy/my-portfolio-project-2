@@ -71,13 +71,6 @@ pipeline {
                 branch 'dev2'
             }
             steps {
-                // script {
-                //     def dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                //     docker.withRegistry('https://index.docker.io/v1/', DOCKER_USER, DOCKER_PASS) {
-                //         dockerImage.push()
-                //     }
-                // }
-
                 script {
                     docker.withRegistry('',DOCKER_CREDENTIAL_ID) {
                         docker_image = docker.build "${IMAGE_NAME}"
