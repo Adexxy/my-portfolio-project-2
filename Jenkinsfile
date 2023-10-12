@@ -88,8 +88,8 @@ pipeline {
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
                             [ARTIFACTID: ARTIFACTID,
-                            classifier: APP_VERSION,
-                            file: ARTIFACTID,
+                            classifier:'',
+                            file: ARTIFACT_FILE_NAME + version + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
