@@ -46,32 +46,32 @@ pipeline {
             }
         }
         
-        // stage('Preview & Manual Approval') {
-        //     // when {
-        //     //     branch 'dev'
-        //     // }
-        //     steps {
-        //         // sh 'cd build && python -m http.server &'
-        //         sh 'npm start &'
-        //         sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
-        //         input "Preview the application and approve to proceed"
-        //     }
-        // }
+        stage('Preview & Manual Approval') {
+            // when {
+            //     branch 'dev'
+            // }
+            steps {
+                // sh 'cd build && python -m http.server &'
+                sh 'npm start &'
+                sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
+                input "Preview the application and approve to proceed"
+            }
+        }
 
-        // stage('Build and Push Docker Image') {
-        //     steps {
-        //         script {
-        //             // Log in to Docker registry using Jenkins credentials
-        //             withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-        //                 sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-        //             }
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    // Log in to Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: 'a9402d12-9abe-40d0-811a-494fd59283c7', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
 
-        //             // Build and push the Docker image
-        //             sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-        //             sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-        //         }
-        //     }
-        // }
+                    // Build and push the Docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
         
         stage('Publish Artifact to Nexus') {
             steps {
@@ -98,20 +98,3 @@ pipeline {
         }
     }
 }
-
-
-// nexusArtifactUploader(
-//         nexusVersion: 'nexus3',
-//         protocol: 'http',
-//         nexusUrl: 'my.nexus.address',
-//         groupId: 'com.example',
-//         version: version,
-//         repository: 'RepositoryName',
-//         credentialsId: 'CredentialsId',
-//         artifacts: [
-//             [artifactId: projectName,
-//              classifier: '',
-//              file: 'my-service-' + version + '.jar',
-//              type: 'jar']
-//         ]
-//      )
