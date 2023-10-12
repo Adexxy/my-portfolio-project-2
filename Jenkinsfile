@@ -89,7 +89,7 @@ pipeline {
                         artifacts: [
                             [ARTIFACTID: ARTIFACTID,
                             classifier: APP_VERSION,
-                            file: ARTIFACT_FILE_NAME,
+                            file: ARTIFACTID,
                             type: 'tar.gz']
                         ]
                     )
