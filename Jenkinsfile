@@ -83,7 +83,7 @@ pipeline {
                         docker_image = docker.build "${IMAGE_NAME}"
                     }
 
-                    docker.withRegistry('',DOCKER_PASS) {
+                    docker.withRegistry('',DOCKER_CREDENTIAL_ID {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
                     }
