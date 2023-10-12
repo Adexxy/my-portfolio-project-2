@@ -98,9 +98,9 @@ pipeline {
                         repository: NEXUS_REPOSITORY,
                         credentialsId: NEXUS_CREDENTIAL_ID,
                         artifacts: [
-                            [ARTIFACTID: ARTIFACTID,
-                            classifier: '',
-                            file: ARTIFACT_FILE_NAME,
+                            [artifactId: ARTIFACTID,
+                            classifier:'',
+                            file: "${ARTIFACTID}" + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
