@@ -89,7 +89,7 @@ pipeline {
                         artifacts: [
                             [artifactId: ARTIFACTID,
                             classifier:'',
-                            file: "${ARTIFACT_FILE_NAME}" + '.tar.gz',
+                            file: "${ARTIFACTID}" + '.tar.gz',
                             type: 'tar.gz']
                         ]
                     )
