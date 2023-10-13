@@ -36,7 +36,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
+                sh "tar -czvf ${ARTIFACT_FILE_NAME} ."
             }
             post {
                 success {
@@ -105,14 +105,14 @@ pipeline {
 
         // }
 
-        stage ('Cleanup Artifacts') {
-            steps {
-                script {
-                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
-                    sh "docker rmi ${IMAGE_NAME}:latest"
-                }
-            }
-        }
+        // stage ('Cleanup Artifacts') {
+        //     steps {
+        //         script {
+        //             sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+        //             sh "docker rmi ${IMAGE_NAME}:latest"
+        //         }
+        //     }
+        // }
 
 
         // stage("Trigger CD Pipeline") {
