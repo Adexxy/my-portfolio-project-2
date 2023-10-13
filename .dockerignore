@@ -1,0 +1,5 @@
+Jenkinsfile
+*.md
+argocd.yaml
+argo/*
+.gitignore
