@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: commerce-app-deployment
 spec:
-  replicas: 0
+  replicas: 2
   selector:
     matchLabels:
       app: commerce-app
