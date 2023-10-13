@@ -36,7 +36,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                sh "tar -czvf ${ARTIFACT_FILE_NAME} build"
+                sh "tar -czvf ${ARTIFACT_FILE_NAME} build ."
             }
             post {
                 success {
