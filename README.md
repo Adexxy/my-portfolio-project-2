@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Simple Node.js Commerce App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains a simple Node.js commerce application built using React for the frontend and Node.js for the backend. The application is set up with continuous integration (CI) and continuous deployment (CD) using various tools.
 
-## Available Scripts
+## Continuous Integration (CI)
 
-In the project directory, you can run:
+### Tools Used
+- GitHub: Version control and collaborative development platform.
+- Node.js: JavaScript runtime for server-side development.
+- React: JavaScript library for building user interfaces.
+- Jenkins: An open-source automation server for CI.
+- Nexus: Repository manager used for managing binary artifacts.
+- Docker: Platform for containerization of applications.
+- Docker Hub: Cloud-based registry for sharing Docker images.
 
-### `npm start`
+### CI Workflow
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Code Changes**: Developers make code changes and push them to the GitHub repository.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **GitHub Actions**: GitHub Actions are triggered on each push to the repository, running automated CI workflows.
 
-### `npm test`
+3. **Build and Test**: Jenkins, running within a Docker container, builds the Node.js backend and React frontend, runs tests, and checks for code quality.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. **Artifact Storage**: Built artifacts and dependencies are stored in Nexus for versioned and controlled management.
 
-### `npm run build`
+## Continuous Deployment (CD)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tools Used
+- GitHub: Version control and collaborative development platform.
+- Kubernetes: An open-source container orchestration system.
+- ArgoCD: A declarative, GitOps continuous delivery tool for Kubernetes.
+- Docker: Platform for containerization of applications.
+- Docker Hub: Cloud-based registry for sharing Docker images.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### CD Workflow
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Release Tagging**: When a specific version is ready for release, a release tag is created in the GitHub repository.
 
-### `npm run eject`
+2. **GitHub Actions**: GitHub Actions are triggered by the release tag, initiating the CD workflow.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. **Build Docker Images**: The application is packaged into Docker images and pushed to Docker Hub.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. **Kubernetes Deployment**: ArgoCD detects the updated images and automatically deploys the new version to the Kubernetes cluster.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This setup ensures that the application is continuously integrated, tested, and deployed whenever changes are made to the codebase, providing a streamlined development and deployment process for the commerce application.
