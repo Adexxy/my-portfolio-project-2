@@ -14,6 +14,7 @@ pipeline {
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
+        MANIFEST_FILE = 'path/to/deployment.yaml'  // Path to your Kubernetes manifest file
     }
     stages {
         stage('Test Docker') {
@@ -136,5 +137,28 @@ pipeline {
 
         // }
 
+    }
+}
+
+
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE_TAG = 'your-docker-registry/your-app:latest'  // Set the desired Docker image tag
+        MANIFEST_FILE = 'path/to/deployment.yaml'  // Path to your Kubernetes manifest file
+    }
+
+    stages {
+        stage('Update Kubernetes Manifest') {
+            steps {
+                script {
+                    // Replace the placeholder in the manifest with the desired Docker image tag
+                    sh "sed -i 's|{{IMAGE_TAG}}|${DOCKER_IMAGE_TAG}|' ${MANIFEST_FILE}"
+                }
+            }
+        }
+        
+        // Other stages...
     }
 }
