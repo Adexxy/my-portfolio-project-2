@@ -85,7 +85,7 @@ pipeline {
             steps {
                 script {
                     // Replace the placeholder in the manifest with the desired Docker image tag
-                    sh "sed -i 's|{{IMAGE_TAG}}|${DOCKER_IMAGE_TAG}|' ${MANIFEST_FILE}"
+                    sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
                 }
             }
         }
