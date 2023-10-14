@@ -18,6 +18,7 @@ pipeline {
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
+        MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
     }
 
     stages {
@@ -71,6 +72,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Update Kubernetes Manifest') {
+            steps {
+                script {
+                    // Replace the placeholder in the manifest with the desired Docker image tag
+                    sh "sed -i 's|{{IMAGE_TAG}}|${DOCKER_IMAGE_TAG}|' ${MANIFEST_FILE}"
+                }
+            }
+        }
         
         stage('Publish Artifact to Nexus') {
             steps {
@@ -96,32 +106,21 @@ pipeline {
             }
         }
 
-                // stage("Trivy Scan") {
-        //     steps {
-        //         script {
-		//    sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image dmancloud/complete-prodcution-e2e-pipeline:1.0.0-22 --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
-        //         }
-        //     }
+        stage("Trivy Scan") {
+            steps {
+                script {
+		            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+                }
+            }
+        }
 
-        // }
-
-        // stage ('Cleanup Artifacts') {
-        //     steps {
-        //         script {
-        //             sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
-        //             sh "docker rmi ${IMAGE_NAME}:latest"
-        //         }
-        //     }
-        // }
-
-
-        // stage("Trigger CD Pipeline") {
-        //     steps {
-        //         script {
-        //             sh "curl -v -k --user admin:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'https://jenkins.dev.dman.cloud/job/gitops-complete-pipeline/buildWithParameters?token=gitops-token'"
-        //         }
-        //     }
-
-        // }
+        stage ('Cleanup Artifacts') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
     }
 }
+
