@@ -17,7 +17,7 @@ pipeline {
         DOCKER_CREDENTIAL_ID = 'a9402d12-9abe-40d0-811a-494fd59283c7'
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
-        IMAGE_TAG = "${APP_VERSION}-test"   //"${APP_VERSION}-${BUILD_NUMBER}"
+        IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
         MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
         GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
     }
