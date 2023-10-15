@@ -1,3 +1,5 @@
 Jenkinsfile
 *.md
-Dockerfile
+argocd.yaml
+argo/*
+.gitignore

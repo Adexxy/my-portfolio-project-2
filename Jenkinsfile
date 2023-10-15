@@ -18,6 +18,8 @@ pipeline {
         ARTIFACT_FILE_NAME = "${ARTIFACTID}.tar.gz"
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
+        MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
+        GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
     }
 
     stages {
@@ -36,7 +38,7 @@ pipeline {
         
         stage('Package') {
             steps {
-                sh "tar -czvf ${ARTIFACT_FILE_NAME} build ."
+                sh "tar -czvf ${ARTIFACT_FILE_NAME} ."
             }
             post {
                 success {
@@ -71,7 +73,34 @@ pipeline {
                 }
             }
         }
-        
+
+        stage("Trivy Scan") {
+            steps {
+                script {
+		            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+                }
+            }
+        }
+
+        stage('Update Kubernetes Manifest and Commit to Branch') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    script {
+                        sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
+                        sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
+
+                        // Use withCredentials to securely pass GIT_USERNAME and GIT_PASSWORD to the git push command
+                        withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            sh "git add ${MANIFEST_FILE}"
+                            sh "git commit -m 'Update manifest with latest image tag'"
+
+                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git HEAD:${GIT_BRANCH}"  // Push changes to the current branch
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Publish Artifact to Nexus') {
             steps {
                 echo 'Publishing artifact to Nexus...'
@@ -95,5 +124,14 @@ pipeline {
                 }
             }
         }
+
+        stage ('Cleanup Artifacts') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
     }
 }
+
