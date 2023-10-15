@@ -84,18 +84,22 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 script {
-                    // Replace the placeholder in the manifest with the desired Docker image tag
-                    script {
-                    // Create a backup of the manifest with .bak extension
-                    sh "cp ${MANIFEST_FILE} ${MANIFEST_FILE}.bak"
+                    // Copy the .bak file as the new manifest
+                    sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
 
                     // Replace the placeholder in the manifest with the updated Docker image tag
                     sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
-                    }
+
+                    // Commit the changes to the Git repository
+                    sh "git add ${MANIFEST_FILE}"
+                    sh "git commit -m 'Update manifest with latest image tag'"
+
+                    // Push the changes to the Git repository
+                    sh "git push origin ${GIT_BRANCH}"
                 }
             }
         }
-        
+
         // stage('Publish Artifact to Nexus') {
         //     steps {
         //         echo 'Publishing artifact to Nexus...'
