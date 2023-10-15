@@ -95,7 +95,7 @@ pipeline {
                     sh "git commit -m 'Update manifest with latest image tag'"
 
                     // Push the changes to the Git repository
-                    sh "git push HEAD:${GIT_BRANCH} HEAD:${GIT_BRANCH}"
+                    sh "git push ${GIT_BRANCH}"
                 }
             }
         }
