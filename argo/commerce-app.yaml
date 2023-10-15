@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: commerce-app
-        image: adexxy/commerce-app:0.1.0-test
+        image: adexxy/commerce-app:0.1.0-83
         ports:
         - containerPort: 3000
 
