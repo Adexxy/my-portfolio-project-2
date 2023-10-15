@@ -19,7 +19,7 @@ pipeline {
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-test"   //"${APP_VERSION}-${BUILD_NUMBER}"
         MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
-        // GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
+        GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
     }
 
     stages {
@@ -84,20 +84,22 @@ pipeline {
 
         stage('Update Kubernetes Manifest') {
             steps {
-                script {
-                    sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
-                    sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
+                withCredentials([usernamePassword(credentialsId: 'MyID', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    script {
+                        sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
+                        sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
 
-                    def isDetachedHead = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim() == 'HEAD'
+                        def isDetachedHead = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim() == 'HEAD'
 
-                    if (isDetachedHead) {
-                        sh "git checkout -b new-branch"
+                        if (isDetachedHead) {
+                            sh "git checkout -b new-branch"
+                        }
+
+                        sh "git add ${MANIFEST_FILE}"
+                        sh "git commit -m 'Update manifest with latest image tag'"
+
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@https://github.com/Adexxy/my-portfolio-project-2.git ${isDetachedHead ? 'new-branch' : 'dev2'}"
                     }
-
-                    sh "git add ${MANIFEST_FILE}"
-                    sh "git commit -m 'Update manifest with latest image tag'"
-
-                    sh "git push origin ${isDetachedHead ? 'new-branch' : 'dev2'}"
                 }
             }
         
