@@ -99,7 +99,7 @@ pipeline {
                         sh "git add ${MANIFEST_FILE}"
                         sh "git commit -m 'Update manifest with latest image tag'"
 
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/your-username/your-repo.git ${branchExists ? 'new-branch' : 'dev2'}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@https://github.com/Adexxy/my-portfolio-project-2.git ${branchExists ? 'new-branch' : 'dev2'}"
                     }
                 }
             }
