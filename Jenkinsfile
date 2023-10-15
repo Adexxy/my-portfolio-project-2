@@ -23,161 +23,115 @@ pipeline {
     }
 
     stages {
-        // stage('Build') {
-        //     steps {
-        //         sh 'npm install'
-        //         sh 'npm run build'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
         
-        // stage('Test') {
-        //     steps {
-        //         sh 'npm test'
-        //     }
-        // }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
         
-        // stage('Package') {
-        //     steps {
-        //         sh "tar -czvf ${ARTIFACT_FILE_NAME} ."
-        //     }
-        //     post {
-        //         success {
-        //             archiveArtifacts artifacts: "${ARTIFACT_FILE_NAME}", onlyIfSuccessful: true
-        //         }
-        //     }
-        // }
+        stage('Package') {
+            steps {
+                sh "tar -czvf ${ARTIFACT_FILE_NAME} ."
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "${ARTIFACT_FILE_NAME}", onlyIfSuccessful: true
+                }
+            }
+        }
         
-        // stage('Preview & Manual Approval') {
-        //     // when {
-        //     //     branch 'dev'
-        //     // }
-        //     steps {
-        //         // sh 'cd build && python -m http.server &'
-        //         sh 'npm start &'
-        //         sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
-        //         input "Preview the application and approve to proceed"
-        //     }
-        // }
+        stage('Preview & Manual Approval') {
+            // when {
+            //     branch 'dev'
+            // }
+            steps {
+                // sh 'cd build && python -m http.server &'
+                sh 'npm start &'
+                sh "echo 'Now...Visit http://localhost:3000 to see your Node.js/React application in action.'"
+                input "Preview the application and approve to proceed"
+            }
+        }
 
-        // stage('Build and Push Docker Image') {
-        //     steps {
-        //         script {
-        //             // Log in to Docker registry using Jenkins credentials
-        //             withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIAL_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-        //                 sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-        //             }
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    // Log in to Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIAL_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    }
 
-        //             // Build and push the Docker image
-        //             sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-        //             sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
-        //         }
-        //     }
-        // }
+                    // Build and push the Docker image
+                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
 
-        // stage("Trivy Scan") {
-        //     steps {
-        //         script {
-		//             sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
-        //         }
-        //     }
-        // }
+        stage("Trivy Scan") {
+            steps {
+                script {
+		            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ${IMAGE_NAME}:${IMAGE_TAG} --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+                }
+            }
+        }
 
-        stage('Update Kubernetes Manifest') {
+        stage('Update Kubernetes Manifest and Commit to Branch') {
             steps {
                 withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     script {
                         sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
                         sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
 
-                        // Check if the branch 'new-branch' exists
-                        // def branchExists = sh(script: 'git branch --list new-branch', returnStatus: true) == 0
-
-                        // if (!branchExists) {
-                        //     sh "git checkout -b new-branch"
-                        // }
-
                         // Use withCredentials to securely pass GIT_USERNAME and GIT_PASSWORD to the git push command
                         withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                             sh "git add ${MANIFEST_FILE}"
                             sh "git commit -m 'Update manifest with latest image tag'"
-
-                            // sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git ${branchExists ? 'new-branch' : 'dev2'}"
-
-                            // sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
 
                             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git HEAD:${GIT_BRANCH}"  // Push changes to the current branch
                         }
                     }
                 }
             }
-        
-            
-
-            // steps {
-            //     withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-            //         script {
-            //             // ... other steps
-
-            //             // Assuming REPO_URL is the Git repository URL
-            //             def repoUrlWithCredentials = "https://${GIT_USERNAME}:${GIT_PASSWORD}@https://github.com/Adexxy/my-portfolio-project-2/tree/dev"
-                        
-            //             // Perform git operations
-            //             sh "git add ."  // Add all changes
-            //             sh "git commit -m 'Jenkins automated commit'"  // Commit changes
-            //             sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
-            //         }
-            //     }
-            // }  
-
-            // steps {
-            //     script {
-            //         // Copy the .bak file as the new manifest
-            //         sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
-
-            //         // Replace the placeholder in the manifest with the updated Docker image tag
-            //         sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
-
-            //         // Commit the changes to the Git repository
-            //         sh "git add ${MANIFEST_FILE}"
-            //         sh "git commit -m 'Update manifest with latest image tag'"
-
-            //         // Push the changes to the Git repository
-            //         sh "git push ${GIT_BRANCH}"
-            //     }
-            // }
         }
 
-        // stage('Publish Artifact to Nexus') {
-        //     steps {
-        //         echo 'Publishing artifact to Nexus...'
-        //         script {
-        //             def groupId = "development"
-        //             nexusArtifactUploader(
-        //                 nexusVersion: NEXUS_VERSION,
-        //                 protocol: NEXUS_PROTOCOL,
-        //                 nexusUrl: NEXUS_URL,
-        //                 groupId: groupId,
-        //                 version: IMAGE_TAG,
-        //                 repository: NEXUS_REPOSITORY,
-        //                 credentialsId: NEXUS_CREDENTIAL_ID,
-        //                 artifacts: [
-        //                     [artifactId: ARTIFACTID,
-        //                     classifier:'',
-        //                     file: "${ARTIFACTID}" + '.tar.gz',
-        //                     type: 'tar.gz']
-        //                 ]
-        //             )
-        //         }
-        //     }
-        // }
+        stage('Publish Artifact to Nexus') {
+            steps {
+                echo 'Publishing artifact to Nexus...'
+                script {
+                    def groupId = "development"
+                    nexusArtifactUploader(
+                        nexusVersion: NEXUS_VERSION,
+                        protocol: NEXUS_PROTOCOL,
+                        nexusUrl: NEXUS_URL,
+                        groupId: groupId,
+                        version: IMAGE_TAG,
+                        repository: NEXUS_REPOSITORY,
+                        credentialsId: NEXUS_CREDENTIAL_ID,
+                        artifacts: [
+                            [artifactId: ARTIFACTID,
+                            classifier:'',
+                            file: "${ARTIFACTID}" + '.tar.gz',
+                            type: 'tar.gz']
+                        ]
+                    )
+                }
+            }
+        }
 
-        // stage ('Cleanup Artifacts') {
-        //     steps {
-        //         script {
-        //             sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
-        //         }
-        //     }
-        // }
+        stage ('Cleanup Artifacts') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
     }
 }
 
