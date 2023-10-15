@@ -90,17 +90,18 @@ pipeline {
                         sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
 
                         // Check if the branch 'new-branch' exists
-                        def branchExists = sh(script: 'git branch --list new-branch', returnStatus: true) == 0
+                        // def branchExists = sh(script: 'git branch --list new-branch', returnStatus: true) == 0
 
-                        if (!branchExists) {
-                            sh "git checkout -b new-branch"
-                        }
+                        // if (!branchExists) {
+                        //     sh "git checkout -b new-branch"
+                        // }
 
                         // Use withCredentials to securely pass GIT_USERNAME and GIT_PASSWORD to the git push command
                         withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                             sh "git add ${MANIFEST_FILE}"
                             sh "git commit -m 'Update manifest with latest image tag'"
-                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git ${branchExists ? 'new-branch' : 'dev2'}"
+                            // sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git ${branchExists ? 'new-branch' : 'dev2'}"
+                            sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
                         }
                     }
                 }
