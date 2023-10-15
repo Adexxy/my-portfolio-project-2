@@ -20,6 +20,7 @@ pipeline {
         IMAGE_TAG = "${APP_VERSION}-${BUILD_NUMBER}"
         MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
         GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
+        GIT_REPO = 'github.com/Adexxy/my-portfolio-project-2.git'
     }
 
     stages {
@@ -92,9 +93,9 @@ pipeline {
                         // Use withCredentials to securely pass GIT_USERNAME and GIT_PASSWORD to the git push command
                         withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                             sh "git add ${MANIFEST_FILE}"
-                            sh "git commit -m 'Update manifest with latest image tag'"
+                            sh "git commit -m 'Update manifest with latest image tag version-${IMAGE_TAG}'"
 
-                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git HEAD:${GIT_BRANCH}"  // Push changes to the current branch
+                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
                         }
                     }
                 }
