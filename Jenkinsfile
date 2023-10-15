@@ -100,8 +100,12 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                             sh "git add ${MANIFEST_FILE}"
                             sh "git commit -m 'Update manifest with latest image tag'"
+
                             // sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git ${branchExists ? 'new-branch' : 'dev2'}"
-                            sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
+
+                            // sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
+
+                            sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/Adexxy/my-portfolio-project-2.git HEAD:${GIT_BRANCH}"  // Push changes to the current branch
                         }
                     }
                 }
