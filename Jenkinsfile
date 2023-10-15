@@ -84,7 +84,7 @@ pipeline {
 
         stage('Update Kubernetes Manifest') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'MyID', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     script {
                         sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
                         sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
