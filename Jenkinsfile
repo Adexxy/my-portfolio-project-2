@@ -91,6 +91,7 @@ pipeline {
 
                     // Replace the placeholder in the manifest with the updated Docker image tag
                     sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
+                    }
                 }
             }
         }
