@@ -85,6 +85,11 @@ pipeline {
             steps {
                 script {
                     // Replace the placeholder in the manifest with the desired Docker image tag
+                    script {
+                    // Create a backup of the manifest with .bak extension
+                    sh "cp ${MANIFEST_FILE} ${MANIFEST_FILE}.bak"
+
+                    // Replace the placeholder in the manifest with the updated Docker image tag
                     sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
                 }
             }
