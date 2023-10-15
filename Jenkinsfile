@@ -19,6 +19,7 @@ pipeline {
         IMAGE_NAME = "${DOCKER_USER}/${ARTIFACTID}"
         IMAGE_TAG = "${APP_VERSION}-test"   //"${APP_VERSION}-${BUILD_NUMBER}"
         MANIFEST_FILE = 'argo/commerce-app.yaml'  // Path to your Kubernetes manifest file
+        // GIT_CREDENTIAL_ID = '0d9032a7-24ac-41f1-8353-0279820df4ed'
     }
 
     stages {
@@ -84,20 +85,56 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 script {
-                    // Copy the .bak file as the new manifest
                     sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
-
-                    // Replace the placeholder in the manifest with the updated Docker image tag
                     sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
 
-                    // Commit the changes to the Git repository
+                    def isDetachedHead = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim() == 'HEAD'
+
+                    if (isDetachedHead) {
+                        sh "git checkout -b new-branch"
+                    }
+
                     sh "git add ${MANIFEST_FILE}"
                     sh "git commit -m 'Update manifest with latest image tag'"
 
-                    // Push the changes to the Git repository
-                    sh "git push ${GIT_BRANCH}"
+                    sh "git push origin ${isDetachedHead ? 'new-branch' : 'dev2'}"
                 }
             }
+        
+            
+
+            // steps {
+            //     withCredentials([usernamePassword(credentialsId: GIT_CREDENTIAL_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+            //         script {
+            //             // ... other steps
+
+            //             // Assuming REPO_URL is the Git repository URL
+            //             def repoUrlWithCredentials = "https://${GIT_USERNAME}:${GIT_PASSWORD}@https://github.com/Adexxy/my-portfolio-project-2/tree/dev"
+                        
+            //             // Perform git operations
+            //             sh "git add ."  // Add all changes
+            //             sh "git commit -m 'Jenkins automated commit'"  // Commit changes
+            //             sh "git push ${repoUrlWithCredentials} HEAD:${GIT_BRANCH}"  // Push changes to the current branch
+            //         }
+            //     }
+            // }  
+
+            // steps {
+            //     script {
+            //         // Copy the .bak file as the new manifest
+            //         sh "cp ${MANIFEST_FILE}.bak ${MANIFEST_FILE}"
+
+            //         // Replace the placeholder in the manifest with the updated Docker image tag
+            //         sh "sed -i 's|{{IMAGE_TAG}}|${IMAGE_TAG}|' ${MANIFEST_FILE}"
+
+            //         // Commit the changes to the Git repository
+            //         sh "git add ${MANIFEST_FILE}"
+            //         sh "git commit -m 'Update manifest with latest image tag'"
+
+            //         // Push the changes to the Git repository
+            //         sh "git push ${GIT_BRANCH}"
+            //     }
+            // }
         }
 
         // stage('Publish Artifact to Nexus') {
