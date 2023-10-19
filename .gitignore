@@ -22,3 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 commerce-app.tar.gz
+terraform/aws/.terraform/*
+terraform/*.tfstate
+terraform/aws/.terraform.*
