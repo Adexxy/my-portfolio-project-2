@@ -14,10 +14,10 @@ resource "aws_vpc" "commerce-app_vpc" {
 
 # Define subnets (public and private)
 resource "aws_subnet" "public_subnet" {
-  count = length(var.zone_alphabet)
-  vpc_id = aws_vpc.commerce-app_vpc.id
-  cidr_block = var.public_subnet_cidr_blocks
-  availability_zone = "${var.region}${element(var.zone_alphabet, count.index)}"
+  count                   = length(var.zone_alphabet)
+  vpc_id                  = aws_vpc.commerce-app_vpc.id
+  cidr_block              = var.public_subnet_cidr_blocks
+  availability_zone       = "${var.region}${element(var.zone_alphabet, count.index)}"
   map_public_ip_on_launch = true # Enable public IPs
   tags = {
     Name = "${var.env_prefix}-public-subnet"
@@ -25,19 +25,19 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count = length(var.zone_alphabet)
-  vpc_id = aws_vpc.commerce-app_vpc.id
-  cidr_block = var.private_subnet_cidr_blocks
+  count             = length(var.zone_alphabet)
+  vpc_id            = aws_vpc.commerce-app_vpc.id
+  cidr_block        = var.private_subnet_cidr_blocks
   availability_zone = "${var.region}${element(var.zone_alphabet, count.index)}"
   tags = {
     Name = "${var.env_prefix}-private-subnet"
   }
 }
 resource "aws_internet_gateway" "commerce-app_igw" {
-    vpc_id = aws_vpc.commerce-app_vpc.id
-    tags = {
-        Name = "${var.env_prefix}-public-rt-igw"
-    }
+  vpc_id = aws_vpc.commerce-app_vpc.id
+  tags = {
+    Name = "${var.env_prefix}-public-rt-igw"
+  }
 }
 
 # Define Route Tables
@@ -61,14 +61,14 @@ resource "aws_route_table" "private" {
 
 # Associate Subnets with Route Tables
 resource "aws_route_table_association" "public_subnet" {
-  count = length(var.zone_alphabet)
-  subnet_id = element(aws_subnet.public_subnet[*].id, count.index)
+  count          = length(var.zone_alphabet)
+  subnet_id      = element(aws_subnet.public_subnet[*].id, count.index)
   route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "private_subnet" {
-  count = length(var.zone_alphabet)
-  subnet_id = element(aws_subnet.private_subnet[*].id, count.index)
+  count          = length(var.zone_alphabet)
+  subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
   route_table_id = aws_route_table.private.id
 }
 
@@ -129,10 +129,13 @@ resource "aws_instance" "jenkins_server" {
               sudo usermod -a -G docker ec2-user
               EOF
 }
+*/
 
 # Define an S3 bucket
 resource "aws_s3_bucket" "commerce-app_bucket" {
   bucket = var.bucket_name
-  acl    = "private"
+  tags = {
+    Name = "${var.env_prefix}-${var.bucket_name}"
+  }
 }
-*/
+

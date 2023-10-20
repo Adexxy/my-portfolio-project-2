@@ -5,15 +5,15 @@ variable "region" {
 }
 
 variable "env_prefix" {
-    description = "Development environment like dev, prod or staging"
-    type = string
-    default = "dev"
+  description = "Development environment like dev, prod or staging"
+  type        = string
+  default     = "dev"
 }
 
 variable "zone_alphabet" {
   description = "AWS availability zone letters"
   type        = list(string)
-  default     = ["a", "b",] # Add more letters if needed
+  default     = ["a", "b", ] # Add more letters if needed
 }
 
 variable "vpc_cidr_block" {
@@ -114,6 +114,6 @@ variable "launch_template_version" {
 variable "bucket_name" {
   description = "Name of the S3 bucket"
   type        = string
-  default = "commerce-app"
+  default     = "commerce-app"
 }
 
