@@ -34,7 +34,7 @@ variable "private_subnet_cidr_blocks" {
   default     = "10.0.2.0/24"
 }
 
-/*variable "eks_cluster_name" {
+variable "eks_cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
   default     = "commerce-eks-cluster"
@@ -85,23 +85,8 @@ variable "jenkins_instance_type" {
   default     = "t2.micro"
 }
 
-variable "jenkins_subnet_id" {
-  description = "Subnet ID for the Jenkins server"
-  type        = string
-}
-
-variable "jenkins_security_group_ids" {
-  description = "Security group IDs for the Jenkins server"
-  type        = list(string)
-}
-
 variable "ssh_key_name" {
   description = "SSH key name for the Jenkins server"
-  type        = string
-}
-
-variable "launch_template_id" {
-  description = "ID of the launch template for the EKS node group"
   type        = string
 }
 
@@ -110,10 +95,22 @@ variable "launch_template_version" {
   type        = string
   default     = "$Latest"
 }
-*/
+
 variable "bucket_name" {
   description = "Name of the S3 bucket"
   type        = string
   default     = "commerce-app"
+}
+
+variable "everywhere_cidr_block" {
+  description = "ip from everywhere"
+  type        = string
+  default     = "0.0.0.0/0"
+}
+
+variable "my_ip_cidr_block" {
+  description = "my ip"
+  type        = string
+  default     = ""
 }
 
