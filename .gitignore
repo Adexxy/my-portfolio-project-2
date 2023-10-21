@@ -23,5 +23,8 @@ yarn-debug.log*
 yarn-error.log*
 commerce-app.tar.gz
 terraform/aws/.terraform/*
-terraform/*.tfstate
+terraform.tfstate
 terraform/aws/.terraform.*
+*rsa
+*rsa.*
+terraform.tfvars
